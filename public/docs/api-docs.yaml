@@ -1,0 +1,832 @@
+openapi: 3.0.0
+info:
+  title: API EXAMPLE MOBILE CHALLENGE
+  version: '0.1'
+servers:
+  - url: 'http://iclinic-example-api.localhost'
+    description: Local
+  - url: 'https://iclinic-example-api-rest.herokuapp.com'
+    description: Production
+
+security:
+  - medicinae_auth: []
+paths:
+
+  ################################## CLINIC ########################################
+  /clinics:
+    post:
+      tags:
+        - Clinics
+      summary: >-
+        Clinics Store
+      requestBody:
+        description: Data for Clinics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClinicsRequestModel'
+      responses:
+        '201':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClinicRequestModel'
+    get:
+      tags:
+        - Clinics
+      summary: >-
+        Clinics GetList
+      parameters:
+          - name: id
+            in: path
+            description: Clinic ID
+            required: false
+            schema:
+              type: string
+          - name: name
+            in: path
+            description: Clinic Name
+            required: false
+            schema:
+              type: string
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ClinicRequestModel'
+                  links:
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type: string
+                          next:
+                            type: string
+                        type: object
+                  meta:
+                    properties:
+                      current_page:
+                        type: number
+                      count:
+                        type: number
+                      first_page_url:
+                        type: string
+                      next_page_url:
+                        type: string
+                      from:
+                        type: number
+                      per_page:
+                        type: number
+                      last_page:
+                        type: number
+                      last_url:
+                        type: string
+                      path:
+                        type: string
+                      to:
+                        type: number
+                      total:
+                        type: number
+                      links:
+                        properties:
+                          url:
+                            type: string
+                          label:
+                            type: string
+                          active:
+                            type: boolean
+                        type: object
+
+  /clinics/{clinic_id}:
+      get:
+        tags:
+          - Clinics
+        summary: Clinics Get
+        description: >-
+          Retorna a listagem do Clinics, possibilidade de filtros e
+          includes.
+        parameters:
+
+        responses:
+          '200':
+            description: sucesso
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ClinicRequestModel'
+
+      put:
+        tags:
+          - Clinics
+        summary: >-
+          Clinics Update
+        parameters:
+          - name: name
+            in: path
+            description: Clinic Name
+            required: true
+            schema:
+              type: string
+        requestBody:
+          description: Dados do Clinics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClinicsRequestModel'
+        responses:
+          '200':
+            description: sucesso
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ClinicRequestModel'
+      delete:
+        tags:
+          - Clinics
+        summary: Clinics Delete
+        parameters: []
+
+        responses:
+          '200':
+            description: sucesso
+            content:
+              application/json:
+                schema:
+                  required:
+                    - error
+                    - messages
+                  properties:
+                    error:
+                      type: boolean
+                      example: 'false'
+                    messages:
+                      type: array
+                      items:
+                        type: string
+                        example: Deleted on database
+                  type: object
+
+
+################################## PATIENT ########################################
+
+  /patients:
+    post:
+      tags:
+        - Patients
+      summary: >-
+        Patients Store
+      requestBody:
+        description: Data for Patients
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientsRequestModel'
+      responses:
+        '201':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientRequestModel'
+    get:
+      tags:
+        - Patients
+      summary: >-
+        Patients GetList
+      parameters:
+        - name: id
+          in: path
+          description: Patient ID
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: Patient Name
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: path
+          description: Patient Email
+          required: false
+          schema:
+            type: string
+        - name: phone
+          in: path
+          description: Patient Phone
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PatientRequestModel'
+                  links:
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type: string
+                          next:
+                            type: string
+                        type: object
+                  meta:
+                    properties:
+                      current_page:
+                        type: number
+                      count:
+                        type: number
+                      first_page_url:
+                        type: string
+                      next_page_url:
+                        type: string
+                      from:
+                        type: number
+                      per_page:
+                        type: number
+                      last_page:
+                        type: number
+                      last_url:
+                        type: string
+                      path:
+                        type: string
+                      to:
+                        type: number
+                      total:
+                        type: number
+                      links:
+                        properties:
+                          url:
+                            type: string
+                          label:
+                            type: string
+                          active:
+                            type: boolean
+                        type: object
+  /patients/{patient_id}:
+    get:
+      tags:
+        - Patients
+      summary: Patients Get
+      description: >-
+        Retorna a listagem do Patients, possibilidade de filtros e
+        includes.
+      parameters: []
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientRequestModel'
+
+    put:
+      tags:
+        - Patients
+      summary: >-
+        Patients Update
+      parameters:
+        - name: name
+          in: path
+          description: Patient Name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Dados do Patients
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientsRequestModel'
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientRequestModel'
+    delete:
+      tags:
+        - Patients
+      summary: Patients Delete
+      parameters:
+
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - error
+                  - messages
+                properties:
+                  error:
+                    type: boolean
+                    example: 'false'
+                  messages:
+                    type: array
+                    items:
+                      type: string
+                      example: Deleted on database
+                type: object
+
+
+################################## PHYSICIAN ########################################
+
+  /physicians:
+    post:
+      tags:
+        - Physicians
+      summary: >-
+        Physicians Store
+      requestBody:
+        description: Data for Physicians
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhysiciansRequestModel'
+      responses:
+        '201':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhysicianRequestModel'
+    get:
+      tags:
+        - Physicians
+      summary: >-
+        Physicians GetList
+      parameters:
+        - name: id
+          in: path
+          description: Physician ID
+          generated: false
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: Physician Name
+          required: false
+          schema:
+            type: string
+        - name: crm
+          in: path
+          description: Physician CRM
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PhysicianRequestModel'
+                  links:
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type: string
+                          next:
+                            type: string
+                        type: object
+                  meta:
+                    properties:
+                      current_page:
+                        type: number
+                      count:
+                        type: number
+                      first_page_url:
+                        type: string
+                      next_page_url:
+                        type: string
+                      from:
+                        type: number
+                      per_page:
+                        type: number
+                      last_page:
+                        type: number
+                      last_url:
+                        type: string
+                      path:
+                        type: string
+                      to:
+                        type: number
+                      total:
+                        type: number
+                      links:
+                        properties:
+                          url:
+                            type: string
+                          label:
+                            type: string
+                          active:
+                            type: boolean
+                        type: object
+
+
+  /physicians/{physician_id}:
+    get:
+      tags:
+        - Physicians
+      summary: Physicians Get
+      description: >-
+        Retorna a listagem do Physicians, possibilidade de filtros e
+        includes.
+      parameters: []
+
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhysicianRequestModel'
+
+    put:
+      tags:
+        - Physicians
+      summary: >-
+        Physicians Update
+      parameters:
+        - name: name
+          in: path
+          description: Physician Name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Dados do Physicians
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhysiciansRequestModel'
+      responses:
+        '200:
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhysicianRequestModel'
+    delete:
+      tags:
+        - Physicians
+      summary: Physicians Delete
+      parameters: []
+
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - error
+                  - messages
+                properties:
+                  error:
+                    type: boolean
+                    example: 'false'
+                  messages:
+                    type: array
+                    items:
+                      type: string
+                      example: Deleted on database
+                type: object
+
+
+################################## PRESCRIPTION ########################################
+
+  /prescriptions:
+    post:
+      tags:
+        - Prescriptions
+      summary: >-
+        Prescriptions Store
+      requestBody:
+        description: Data for Prescriptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrescriptionsRequestModel'
+      responses:
+        '201':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescriptionRequestModel'
+    get:
+      tags:
+        - Prescriptions
+      summary: >-
+        Prescriptions GetList
+      parameters:
+        - name: id
+          in: path
+          description: Prescription ID
+          generated: true
+          schema:
+            type: string
+        - name: client_id
+          in: path
+          description: Client ID
+          required: false
+          schema:
+            type: string
+        - name: patient_id
+          in: path
+          description: Patient ID
+          required: false
+          schema:
+            type: string
+        - name: physician_id
+          in: path
+          description: Physician ID
+          required: false
+          schema:
+            type: string
+        - name: text
+          in: path
+          description: Text
+          required: false
+          schema:
+            type: string
+        - name: patient_or_physician_name
+          in: path
+          description: Search prescriptions by name of patient or name of physician.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PrescriptionsGetListModel'
+                  links:
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type: string
+                          next:
+                            type: string
+                        type: object
+                  meta:
+                    properties:
+                      current_page:
+                        type: number
+                      count:
+                        type: number
+                      first_page_url:
+                        type: string
+                      next_page_url:
+                        type: string
+                      from:
+                        type: number
+                      per_page:
+                        type: number
+                      last_page:
+                        type: number
+                      last_url:
+                        type: string
+                      path:
+                        type: string
+                      to:
+                        type: number
+                      total:
+                        type: number
+                      links:
+                        properties:
+                          url:
+                            type: string
+                          label:
+                            type: string
+                          active:
+                            type: boolean
+                        type: object
+
+  /prescriptions/{prescription_id}:
+    get:
+      tags:
+        - Prescriptions
+      summary: Prescriptions Get
+      description: >-
+        Retorna a listagem do Prescriptions, possibilidade de filtros e
+        includes.
+      parameters: []
+
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescriptionRequestModel'
+
+    put:
+      tags:
+        - Prescriptions
+      summary: >-
+        Prescriptions Update
+      parameters:
+        - name: name
+          in: path
+          description: Prescription Name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Dados do Prescriptions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrescriptionsRequestModel'
+      responses:
+        200:
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescriptionRequestModel'
+    delete:
+      tags:
+        - Prescriptions
+      summary: Prescriptions Delete
+      parameters: []
+
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - error
+                  - messages
+                properties:
+                  error:
+                    type: boolean
+                    example: 'false'
+                  messages:
+                    type: array
+                    items:
+                      type: string
+                      example: Deleted on database
+                type: object
+components:
+  schemas:
+    ClinicRequestModel:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+    ClinicsRequestModel:
+        type: object
+        properties:
+          name:
+            type: string
+    PatientRequestModel:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+    PatientsRequestModel:
+        type: object
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+          phone:
+            type: string
+    PhysicianRequestModel:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        crm:
+          type: string
+    PhysiciansRequestModel:
+        type: object
+        properties:
+          name:
+            type: string
+          crm:
+            type: string
+    PrescriptionRequestModel:
+      type: object
+      properties:
+        id:
+          type: number
+        clinic_id:
+          type: number
+        patient_id:
+          type: number
+        physician_id:
+          type: number
+        text:
+          type: string
+    PrescriptionsRequestModel:
+        type: object
+        properties:
+          clinic_id:
+            type: number
+          patient_id:
+            type: number
+          physician_id:
+            type: number
+          text:
+            type: string
+    PrescriptionsGetListModel:
+        type: object
+        properties:
+          clinic:
+            type: array
+            items:
+              $ref: '#/components/schemas/ClinicRequestModel'
+          patient:
+            type: array
+            items:
+              $ref: '#/components/schemas/PatientRequestModel'
+          physician:
+            type: array
+            items:
+              $ref: '#/components/schemas/PhysicianRequestModel'
+          text:
+            type: string
+
+  securitySchemes:
+    medicinae_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /oauth/token
+          scopes: {}
+tags:
+  - name: Clinics
+    description: Api's Clinics
+  - name: Patients
+    description: Api's Patients
+  - name: Physicians
+    description: Api's Physicians
+  - name: Prescriptions
+    description: Api's Prescriptions
