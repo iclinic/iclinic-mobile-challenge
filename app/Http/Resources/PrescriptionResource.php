@@ -18,6 +18,7 @@ class PrescriptionResource extends ResourceCollection
         $result = $this->collection->map(function ($item, $key) {
             return [
                 "id" => $item->id,
+                "text" => $item->text,
                 "clinic" => [
                     'id' => $item->clinics_id,
                     'name' => $item->clinics_name,
